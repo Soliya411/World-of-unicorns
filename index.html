@@ -1,0 +1,161 @@
+<html>
+<head>
+  <title>Магічний Світ Єдинорогів</title>
+  <link href="style.css " rel="stylesheet">
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <header>
+    <h1 class="glow">Магічний Світ Єдинорогів</h1>
+    <p class="subtitle">Де мрії стають реальністю</p>
+  </header>
+
+  <nav>
+    <a href="#home">Головна</a>
+    <a href="#about">Про єдинорогів</a>
+    <a href="#facts">Цікаві факти</a>
+  </nav>
+
+  <div style="text-align: center; margin-top: 20px;">
+  <button id="theme-toggle">Перемкнути тему</button>
+</div>
+
+  <section id="home" class="section fade-in">
+    <div class="content-row">
+      <div class="text">
+        <h2>Ласкаво просимо!</h2>
+        <p>Поринь у фантастичний світ, де мешкають єдинороги — істоти з сяючим серцем і золотим рогом. Вони живуть у туманних лісах, серед веселок і магії.</p>
+      </div>
+      <div class="image">
+        <img src="https://media.istockphoto.com/id/1218902753/uk/%D0%B2%D1%96%D0%B4%D0%B5%D0%BE/%D1%94%D0%B4%D0%B8%D0%BD%D0%BE%D1%80%D1%96%D0%B3-%D0%B1%D1%96%D0%BB%D0%B8%D0%B9-%D0%BA%D1%96%D0%BD%D1%8C-%D1%83-%D1%82%D0%B5%D0%BC%D1%80%D1%8F%D0%B2%D1%96.jpg?s=640x640&k=20&c=kyrN2Qys18AJ_A-iDjGfCbOxKoz8zF83OI_ESRafo80=" alt="Єдиноріг у тумані">
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section fade-in">
+    <div class="content-row reverse">
+      <div class="image">
+        <img src="https://media.istockphoto.com/id/1222949568/uk/%D1%84%D0%BE%D1%82%D0%BE/%D1%94%D0%B4%D0%B8%D0%BD%D0%BE%D1%80%D1%96%D0%B3-%D1%83-%D0%B7%D0%B0%D1%87%D0%B0%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B9-%D0%BB%D1%96%D1%81.jpg?s=612x612&w=0&k=20&c=b5SZTbGSXH0DrShR6qPuG6_u2o7oaMZVRwDCwLJUWfA=" alt="Магічний єдиноріг">
+      </div>
+      <div class="text">
+        <h2>Хто такий єдиноріг?</h2>
+        <p>Єдиноріг — це магічна істота, яка символізує чистоту, гармонію і силу природи. Його ріг, згідно з легендами, має цілющі властивості, а сама істота здатна бачити правду в серці кожного.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="facts" class="section fade-in">
+    <h2 class="glow">Цікаві факти</h2>
+    <ul>
+      <li>Єдинороги вважаються символом Шотландії.</li>
+      <li>У легендах їх часто супроводжують веселки та місячне світло.</li>
+      <li>Тільки чиста душа може побачити справжнього єдинорога.</li>
+      <li>Ріг єдинорога називають "аликорн" і йому приписують магічні властивості.</li>
+    </ul>
+    <div class="gallery">
+  <img src="https://st.depositphotos.com/1794911/1348/i/450/depositphotos_13486419-stock-photo-unicorn.jpg" alt="Єдиноріг 1">
+  <img src="https://st.depositphotos.com/62628780/54968/i/450/depositphotos_549685546-stock-photo-believe-the-unbelievable-shot-of.jpg" alt="Єдиноріг 2">
+  <img src="https://kakoy-smysl.ru/wp-content/uploads/2021/12/298.jpg" alt="Єдиноріг 3">
+</div>
+  </section>
+
+ <script>
+  const btn = document.getElementById('theme-toggle');
+  const body = document.body;
+
+  btn.onclick = () => {
+    body.classList.toggle('light');
+    btn.textContent = body.classList.contains('light') 
+      ? 'Увімкнути нічну тему' 
+      : 'Перемкнути тему';
+  };
+</script>
+
+<section id="game" class="section fade-in">
+  <h2 class="glow">Збери зірки єдинорогом!</h2>
+  <div class="game-container">
+    <div id="unicorn">🦄</div>
+    <div class="score">Зібрано: <span id="counter">0</span> зірок</div>
+    <button id="restart">Почати знову</button>
+  </div>
+</section>
+
+<script>
+  const game = document.querySelector('.game-container');
+  const unicorn = document.getElementById('unicorn');
+  const counter = document.getElementById('counter');
+  const restartBtn = document.getElementById('restart');
+  let score = 0;
+  let stars = [];
+
+  game.addEventListener('mousemove', (e) => {
+    const rect = game.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    unicorn.style.left = x + 'px';
+  });
+
+  function createStar() {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.innerHTML = '⭐';
+    star.style.left = Math.random() * 90 + 5 + '%';
+    game.appendChild(star);
+    stars.push(star);
+    
+    let pos = -30;
+    const fall = setInterval(() => {
+      pos += 3;
+      star.style.top = pos + 'px';
+      
+      if (isCollision(unicorn, star)) {
+        collectStar(star, fall);
+      }
+      
+      if (pos > 300) {
+        clearInterval(fall);
+        star.remove();
+      }
+    }, 20);
+  }
+
+  function isCollision(unicorn, star) {
+    const unicornRect = unicorn.getBoundingClientRect();
+    const starRect = star.getBoundingClientRect();
+    
+    return !(
+      starRect.bottom < unicornRect.top ||
+      starRect.top > unicornRect.bottom ||
+      starRect.right < unicornRect.left ||
+      starRect.left > unicornRect.right
+    );
+  }
+
+  function collectStar(star, interval) {
+    clearInterval(interval);
+    star.remove();
+    score++;
+    counter.textContent = score;
+    unicorn.style.transform = 'scale(1.5)';
+    setTimeout(() => unicorn.style.transform = 'scale(1)', 200);
+  }
+
+  restartBtn.addEventListener('click', () => {
+    stars.forEach(star => star.remove());
+    stars = [];
+    score = 0;
+    counter.textContent = score;
+  });
+
+  setInterval(createStar, 1000);
+</script>
+
+</body>
+
+<footer>
+  <p>Магічний Світ Єдинорогів</p>
+</footer>
+
+<div id="scroll-top" class="scroll-top">🦄</div>
+</html>
